@@ -124,14 +124,7 @@ class RatingsParser:
             self._print_progress_bar()
 
     def _print_progress_bar(self):
-        if not self.progress_bar:
-            self.progress_bar = ProgressBar(
-                max_value=self.movies_count, redirect_stdout=True
-            )
-        if len(self.movies) >= self.movies_count:
-            self.progress_bar.finish()
-        else:
-            self.progress_bar.update(len(self.movies))
+        print("*")
 
     @staticmethod
     def _get_movie_tiles(movie_listing_page):

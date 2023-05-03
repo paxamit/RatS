@@ -5,6 +5,7 @@ import os
 import sys
 import time
 import traceback
+from pprint import pprint
 from typing import Mapping, List
 
 from RatS.allocine.allocine_ratings_inserter import AlloCineRatingsInserter
@@ -175,6 +176,7 @@ def get_inserter_from_arg(
 
 def execute(args):
     try:
+        pprint(args)
         site: Site = Site(args.source.upper())
         parser: RatingsParser = get_parser_from_arg(site)(args)
         movies: List[Movie] = execute_parsing(args, parser)
@@ -191,7 +193,7 @@ def execute_inserting(args, movies: List[Movie], parser: RatingsParser):
         if args.all_destinations
         else [Site(destination.upper()) for destination in args.destination]
     )
-    _filter_source_site_from_destinations(destinations, parser.site.site_name)
+    #_filter_source_site_from_destinations(destinations, parser.site.site_name)
     if destinations:
         if len(movies) == 0:
             NoMoviesForInsertion(
@@ -214,7 +216,6 @@ def _filter_source_site_from_destinations(
         command_line.info(
             f"Will not insert ratings to their source. Skipping {parser_site_name}."
         )
-
 
 def execute_parsing(args, parser: RatingsParser) -> List[Movie]:
     if not parser.site.CREDENTIALS_VALID:

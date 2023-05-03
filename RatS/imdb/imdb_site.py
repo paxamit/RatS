@@ -35,7 +35,7 @@ class IMDB(BaseSite):
             )
             > 0
         ):
-            # time.sleep(30)  # activate this line and handle the captcha manually once using the -x command line option
+            time.sleep(30)  # activate this line and handle the captcha manually once using the -x command line option
             self.browser_handler.kill()
             raise CaptchaPresentException(
                 f"Login to {self.site_name} failed.\r\n"

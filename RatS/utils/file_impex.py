@@ -74,6 +74,32 @@ def convert_csv_row_to_movie(headers, row) -> Movie:
     )
     return movie
 
+def load_movies_from_trakt_csv(filepath: str, encoding: str = "UTF-8") -> List[Movie]:
+    sys.stdout.write("===== getting movies from CSV\r\n")
+    sys.stdout.flush()
+    wait_for_file_to_exist(filepath)
+    with open(filepath, newline="", encoding=encoding) as input_file:
+        reader = csv.reader(input_file, delimiter=",")
+        headers = next(reader, None)
+        return list(filter(None, [convert_trakt_csv_row_to_movie(headers, row) for row in reader]))
+
+def convert_trakt_csv_row_to_movie(headers, row) -> Movie:
+    movie_year = row[headers.index("year")]
+
+    if row[headers.index("type")] == "episode":
+        return None
+
+    movie = Movie(
+        title=row[headers.index("title")],
+        year=int(movie_year) if movie_year else 0,
+    )
+    imdb_id = row[headers.index("imdb_id")]
+    movie.site_data[Site.IMDB] = SiteSpecificMovieData(
+        id=imdb_id,
+        url="https://www.imdb.com/title/"+imdb_id,
+        my_rating=int(row[headers.index("rating")]),
+    )
+    return movie
 
 def save_movies_to_csv(
     movies: List[Movie],

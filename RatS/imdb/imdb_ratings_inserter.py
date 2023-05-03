@@ -15,21 +15,9 @@ class IMDBRatingsInserter(RatingsInserter):
         super(IMDBRatingsInserter, self).__init__(IMDB(args), args)
 
     def _find_movie(self, movie: Movie):
-        search_params = urllib.parse.urlencode({"q": movie.title})
-        search_url = f"https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&{search_params}"
-        self.site.browser.get(search_url)
-        time.sleep(1)
-        search_result_page = BeautifulSoup(self.site.browser.page_source, "html.parser")
-        search_results_list = search_result_page.find(class_="findList")
-        if search_results_list:  # found something
-            search_results = search_results_list.find_all(class_="findResult")
-            for search_result in search_results:
-                if self._is_requested_movie(movie, search_result):
-                    movie_url = "https://www.imdb.com" + search_result.find("a")["href"]
-                    self.site.browser.get(movie_url)
-                    return True
-            return False
-        return False
+        movie_url = f"https://www.imdb.com/title/{movie.id}"
+        self.site.browser.get(movie_url)
+        return True
 
     def _is_requested_movie(self, movie: Movie, search_result):
         result_annotation = search_result.find(class_="result_text").get_text()

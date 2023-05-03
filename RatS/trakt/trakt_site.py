@@ -15,7 +15,7 @@ class Trakt(BaseSite):
         super(Trakt, self).__init__(args)
         self._handle_privacy_notice_if_present()
         self.MY_RATINGS_URL = (
-            f"https://trakt.tv/users/{self.USERNAME}/ratings/movies/all/added"
+            f"https://trakt.tv/users/axameat/ratings/movies/all/added"
         )
 
     def _handle_privacy_notice_if_present(self):
